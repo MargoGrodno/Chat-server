@@ -84,7 +84,7 @@ function getHandler(req, res, continueWith) {
     }
 
     if (urlToken == undefined) {
-        continueWith(Error("Bad Request!!!"));
+        continueWith(Error("Bad Request"));
         return;
     }
 
