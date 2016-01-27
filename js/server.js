@@ -5,8 +5,9 @@ var historyMod = require('./history');
 
 var history = new historyMod.History();
 var toBeResponded = [];
-
 var ip = getIp();
+
+var startTime = curentDateTime();
 
 var handlerMap = {
     "GET": getHandler,
@@ -72,6 +73,15 @@ function responseWithError(response, err) {
 
 function getHandler(req, res, continueWith) {
     var urlToken = getUrlToken(req.url);
+
+    if (req.url == "/") {
+        continueWith({
+            status: "Running",
+            startTime: startTime,
+            curentToken: history.getToken()
+        });
+        return;
+    }
 
     if (urlToken == undefined) {
         continueWith(Error("Bad Request!!!"));
@@ -179,6 +189,16 @@ function getHourMinutes(utcNumberDate) {
     return hour + ":" + min;
 }
 
+function curentDateTime() {
+    var currentdate = new Date();
+    var datetime = currentdate.getDate() + "/" +
+        (currentdate.getMonth() + 1) + "/" +
+        currentdate.getFullYear() + " @ " +
+        currentdate.getHours() + ":" +
+        currentdate.getMinutes() + ":" +
+        currentdate.getSeconds();
+    return datetime;
+}
 
 function startServer(port) {
     server.listen(port, ip);
